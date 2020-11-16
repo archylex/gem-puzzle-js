@@ -7,7 +7,7 @@ export default class Solver8 {
 
   move(state, pos, steps) {
     const newState = state.slice();
-    this.swap(newState, pos, pos + steps);
+    Solver8.swap(newState, pos, pos + steps);
     return newState;
   }
 
@@ -30,8 +30,8 @@ export default class Solver8 {
 
     if (row > 0) {
       newState = this.move(state, pos, -3);
-      if (!this.compare(newState, state.prev)) {
-        tmpState = this.hashState(newState);
+      if (!Solver8.compare(newState, state.prev)) {
+        tmpState = Solver8.hashState(newState);
         if (typeof this.hash[tmpState] === 'undefined') {
           this.hash[tmpState] = newState;
           newState.prev = state;
@@ -42,8 +42,8 @@ export default class Solver8 {
 
     if (col > 0) {
       newState = this.move(state, pos, -1);
-      if (!this.compare(newState, state.prev)) {
-        tmpState = this.hashState(newState);
+      if (!Solver8.compare(newState, state.prev)) {
+        tmpState = Solver8.hashState(newState);
         if (typeof this.hash[tmpState] === 'undefined') {
           this.hash[tmpState] = newState;
           newState.prev = state;
@@ -54,8 +54,8 @@ export default class Solver8 {
 
     if (row < 2) {
       newState = this.move(state, pos, 3);
-      if (!this.compare(newState, state.prev)) {
-        tmpState = this.hashState(newState);
+      if (!Solver8.compare(newState, state.prev)) {
+        tmpState = Solver8.hashState(newState);
         if (typeof this.hash[tmpState] === 'undefined') {
           this.hash[tmpState] = newState;
           newState.prev = state;
@@ -66,8 +66,8 @@ export default class Solver8 {
 
     if (col < 2) {
       newState = this.move(state, pos, 1);
-      if (!this.compare(newState, state.prev)) {
-        tmpState = this.hashState(newState);
+      if (!Solver8.compare(newState, state.prev)) {
+        tmpState = Solver8.hashState(newState);
         if (typeof this.hash[tmpState] === 'undefined') {
           this.hash[tmpState] = newState;
           newState.prev = state;
@@ -87,7 +87,7 @@ export default class Solver8 {
     const result = [this.values[i]];
     while (_) {
       for (let j = 0; j < this.size; j++) {
-        if (this.compare(_, this.values[j])) {
+        if (Solver8.compare(_, this.values[j])) {
           _ = this.values[j].prev;
           result.push(this.values[j]);
           break;
@@ -105,7 +105,7 @@ export default class Solver8 {
     this.size += 1;
 
     for (let i = 0; i < this.size; i++) {
-      if (this.compare(goalState, this.values[i])) {
+      if (Solver8.compare(goalState, this.values[i])) {
         return this.collateStates(i);
       }
       const tmpSuccessors = this.getSuccessors(this.values[i]);
