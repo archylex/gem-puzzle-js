@@ -267,6 +267,7 @@ export default class GUI {
       this._moveCounter.setMoves(json.moves);
       this._timer.setStartTime(json.time);
       if (this._size === 3 || this._size === 4) this.disableSolveButton(false);
+      else this.disableSolveButton(true);
     } else {
       this.removeSavedGame();
     }
