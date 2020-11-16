@@ -10,6 +10,7 @@ import Tile from './Tile';
 import DragNDrop from '../DragNDrop';
 import GemPuzzle from '../GemPuzzle';
 import Solver from '../Solver';
+import Solver8 from '../Solver8';
 import GameAPI from '../utils/GameAPI';
 import Utils from '../utils/Utils';
 import ArrayData from '../utils/ArrayData';
@@ -79,6 +80,14 @@ export default class GUI {
 
     this.addListeners();
     this.disableSolveButton(true);
+
+    if (localStorage.getItem('settings')) {
+      const json = JSON.parse(localStorage.getItem('settings'));
+      this._isMusic = json.music;
+      this._isSound = json.sound;
+      this._isNumbers = json.numbers;
+      this._menu.setParams(this._isSound, this._isMusic, this._isNumbers);
+    }
   }
 
   addListeners() {
@@ -89,9 +98,10 @@ export default class GUI {
       this.updateTilesPosition();
       this._moveCounter.reset();
       this._timer.startTimer();
-      this._isWon = false;      
+      this._isWon = false;
       if (this._isMusic) this._music.play();
-      if (this._size === 4) this.disableSolveButton(false);
+      if (this._size === 4 || this._size === 3 || this._size === 8) this.disableSolveButton(false);
+      else this.disableSolveButton(true);
     });
 
     this._menuButton.addEventListener('click', () => {
@@ -256,7 +266,7 @@ export default class GUI {
       this.updateTilesPosition();
       this._moveCounter.setMoves(json.moves);
       this._timer.setStartTime(json.time);
-      this.disableSolveButton(false);
+      if (this._size === 3 || this._size === 4) this.disableSolveButton(false);
     } else {
       this.removeSavedGame();
     }
@@ -305,8 +315,16 @@ export default class GUI {
 
   solveGame() {
     const seq = ArrayData.convertObj2dToArr(this._tiles2d, this._size);
-    const solver = new Solver(seq, this._size);
-    const solveStr = solver.getSolve();
+    let solveStr = '';
+
+    if (this._size === 3) {
+      const solver8 = new Solver8();
+      const result = solver8.bfs(seq);
+      solveStr = solver8.convertToWords(result);
+    } else {
+      const solver = new Solver(seq, this._size);
+      solveStr = solver.getSolve();
+    }
 
     this._solve = solveStr.split(' ');
     this._solve.pop();
@@ -321,6 +339,9 @@ export default class GUI {
       this._isMusic = isMusic;
       this._isSound = isSound;
       this._isNumbers = isNumbers;
+
+      const sets = JSON.stringify({ music: isMusic, sound: isSound, numbers: isNumbers });
+      localStorage.setItem('settings', sets);
 
       if (this._isMusic) this._music.play();
       else {
@@ -369,7 +390,7 @@ export default class GUI {
         }
         break;
       case 'RIGHT':
-        for (const k in this._tiles2d) {
+        for (const k in this._tiles2d) {          
           if (this._tiles2d[k].row === this._tiles2d[0].row && this._tiles2d[k].column === this._tiles2d[0].column + 1) {
             this._tiles2d[k].column = this._tiles2d[0].column;
             this._tiles2d[0].column = this._tiles2d[k].column + 1;

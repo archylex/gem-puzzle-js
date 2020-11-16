@@ -99,6 +99,12 @@ export default class Menu {
     });
   }
 
+  setParams(s, m, n) {
+    this._numsCheckBox.checked = n;
+    this._soundCheckBox.checked = s;
+    this._musicCheckBox.checked = m;
+  }
+
   dropdownListTogle() {
     this._isSizeButtonOn = !this._isSizeButtonOn;
     if (this._isSizeButtonOn) this._dropdownContent.classList.add('dropdown-content-active');
