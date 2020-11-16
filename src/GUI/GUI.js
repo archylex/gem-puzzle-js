@@ -100,7 +100,7 @@ export default class GUI {
       this._timer.startTimer();
       this._isWon = false;
       if (this._isMusic) this._music.play();
-      if (this._size === 4 || this._size === 3 || this._size === 8) this.disableSolveButton(false);
+      if (this._size === 4 || this._size === 3) this.disableSolveButton(false);
       else this.disableSolveButton(true);
     });
 
@@ -423,7 +423,7 @@ export default class GUI {
     this.updateTilesPosition();
 
     setTimeout(() => {
-      if (n < this._solve.length) this.stepByStep(n + 1);
+      if (this._solve !== null && n < this._solve.length) this.stepByStep(n + 1);
       else this.endStepByStep();
     }, 1000);
   }
