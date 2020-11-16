@@ -21,5 +21,6 @@ module.exports = {
     'no-console': ["error", { 
       allow: ["warn", "error"] 
     }],    
+    'no-param-reassign': [2, { "props": false }],
   },
 };
