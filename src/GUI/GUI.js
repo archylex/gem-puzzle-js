@@ -320,7 +320,7 @@ export default class GUI {
     if (this._size === 3) {
       const solver8 = new Solver8();
       const result = solver8.bfs(seq);
-      solveStr = solver8.convertToWords(result);
+      solveStr = Solver8.convertToWords(result);
     } else {
       const solver = new Solver(seq, this._size);
       solveStr = solver.getSolve();
